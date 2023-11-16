@@ -1,0 +1,19 @@
+services:
+  - type: web
+    plan: free
+    name: ReportBot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    repo: https://github.com/Snowball-0/Telegram-Report-Bot
+    branch: main
+    autoDeploy: false
+    envVars:
+      - key: BOT_TOKEN
+        sync: true
+      - key: API_ID
+        sync: true
+      - key: API_HASH
+        sync: true
+      - key: OWNER
+        sync: true
