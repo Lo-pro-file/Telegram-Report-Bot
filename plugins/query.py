@@ -34,10 +34,10 @@ async def handle_Query(bot: Client, query: CallbackQuery):
     if data == "help":
 
         HelpBtn = [
-            [InlineKeyboardButton(text='Tᴀʀɢᴇᴛ 🎯', callback_data='chgtarget'), InlineKeyboardButton
+            [InlineKeyboardButton(text='Tᴀʀɢᴇᴛ 🎯', callback_data='target'), InlineKeyboardButton
                 (text='Dᴇʟᴇᴛᴇ Cᴏɴғɪɢ ❌', callback_data='delconfig')],
-            [InlineKeyboardButton(text='Tɢ Aᴄᴄᴏᴜɴᴛs 👥', callback_data='account_config')
-            , InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='home')]
+            [InlineKeyboardButton(text='Tɢ Aᴄᴄᴏᴜɴᴛs 👥', callback_data='account_config'),
+             InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='home')]
         ]
 
         await query.message.edit(text=Txt.HELP_MSG, reply_markup=InlineKeyboardMarkup(HelpBtn))
@@ -76,16 +76,36 @@ async def handle_Query(bot: Client, query: CallbackQuery):
         Btn = [
             [InlineKeyboardButton(text='❗Hᴇʟᴘ', callback_data='help'), InlineKeyboardButton(
                 text='🌀Sᴇʀᴠᴇʀ Sᴛᴀᴛs', callback_data='server')],
-            [InlineKeyboardButton(text='🌻Uᴘᴅᴀᴛᴇs', url='https://t.me/Kdramaland_Official')
-            , InlineKeyboardButton(text='🌨️Aʙᴏᴜᴛ', callback_data='about')],
+            [InlineKeyboardButton(text='🌻Uᴘᴅᴀᴛᴇs', url='https://t.me/Kdramaland_Official'),
+             InlineKeyboardButton(text='🌨️Aʙᴏᴜᴛ', callback_data='about')],
             [InlineKeyboardButton(text='❄️Dᴇᴠᴇʟᴏᴘᴇʀ',
                                   url='https://t.me/Snowball_Official')]
         ]
 
         await query.message.edit(text=Txt.START_MSG.format(query.from_user.mention), reply_markup=InlineKeyboardMarkup(Btn))
 
+    elif data == "target":
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as file:
+                config = json.load(file)
+
+        else:
+            return await query.message.edit(text="You didn't make a config yet !\n\n Firstly make config by using /make_config", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='help')]]))
+
+        Info = await bot.get_chat(config['Target'])
+
+        btn = [
+            [InlineKeyboardButton(text='Change Target',
+                                  callback_data='chgtarget')],
+            [InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='home')]
+        ]
+
+        text = f"Channel Name :- <code> {Info.title} </code>\nChannel Username :- <code> @{Info.username} </code>\nChannel Chat Id :- <code> {Info.id} </code>"
+
+        await query.message.edit(text=text, reply_to_message_id=query.message.id, reply_markup=InlineKeyboardMarkup(btn))
+
     elif data == "chgtarget":
-        print('Inside')
+
         try:
             with open(config_path, 'r', encoding='utf-8') as file:
                 config = json.load(file)
@@ -146,6 +166,13 @@ async def handle_Query(bot: Client, query: CallbackQuery):
 
     elif data == "account_config":
 
+        if config_path.exists():
+            with open(config_path, 'r', encoding='utf-8') as file:
+                config = json.load(file)
+
+        else:
+            return await query.message.edit(text="You didn't make a config yet !\n\n Firstly make config by using /make_config", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='help')]]))
+
         with open(config_path, 'r', encoding='utf-8') as file:
             config = json.load(file)
 
@@ -169,5 +196,5 @@ async def handle_Query(bot: Client, query: CallbackQuery):
                 accountData.update({'UserId': account['OwnerUid']})
                 accountData.update({'Username': account['OwnerUname']})
 
-        await query.message.edit(text=Txt.ACCOUNT_INFO.format(accountData.get('Name'), accountData.get('UserId'), accountData.get('Username')), reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='account_config')]]))
+        await query.message.edit(text=Txt.ACCOUNT_INFO.format(accountData.get('Name'), accountData.get('UserId'), accountData.get('Username')), reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='help')]]))
         accountData = {}
