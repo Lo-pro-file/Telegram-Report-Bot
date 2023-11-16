@@ -2,15 +2,17 @@ import json
 import os
 import subprocess
 from pathlib import Path
+import sys
 from pyrogram import Client, filters
 from pyrogram.types import Message, ReplyKeyboardMarkup, ReplyKeyboardRemove
+from pyrogram.errors import MessageIdInvalid
 from info import Config, Txt
 
 
 config_path = Path("config.json")
 
 
-async def Report_Function(No, msg):
+async def Report_Function(No):
 
     listofchoise = ['Report for child abuse', 'Report for copyrighted content', 'Report for impersonation', 'Report an irrelevant geogroup',
                     'Report an illegal durg', 'Report for Violence', 'Report for offensive person detail', 'Reason for Pornography', 'Report for spam"']
@@ -52,30 +54,55 @@ async def CHOICE_OPTION(bot, msg, number):
     with open(config_path, 'r', encoding='utf-8') as file:
         config = json.load(file)
 
-    ms = await bot.send_message(chat_id=msg.chat.id, text=f"**Please Wait**", reply_to_message_id=msg.id, reply_markup=ReplyKeyboardRemove())
-    result = await Report_Function(number, msg)
-    await ms.delete()
+    try:
+        if Path('report.txt').exists():
+            return await msg.reply_text(text="**Already One Process is Ongoing Please Wait Until it's Finished ⏳**", reply_to_message_id=msg.id)
 
-    if result[1]:
+        no_of_reports = await bot.ask(text=Txt.SEND_NO_OF_REPORT_MSG.format(config['Target']), chat_id=msg.chat.id, filters=filters.text, timeout=30, reply_markup=ReplyKeyboardRemove())
+    except:
+        await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /report")
+        return
+
+    ms = await bot.send_message(chat_id=msg.chat.id, text=f"**Please Wait**\n\n Have Patience ⏳", reply_to_message_id=msg.id, reply_markup=ReplyKeyboardRemove())
+    if str(no_of_reports.text).isnumeric():
+
         try:
-            # Assuming output is a bytes object
-            output_bytes = result[0]
-            # Decode bytes to string and replace "\r\n" with newlines
-            output_string = output_bytes.decode('utf-8').replace('\r\n', '\n')
+            i = 0
+            while i < int(no_of_reports.text):
+                result = await Report_Function(number)
 
-            await bot.send_message(chat_id=msg.chat.id, text=f"{output_string}\n Reported To @{config['Target']} ✅", reply_to_message_id=msg.id)
-        except:
-            Text = f"""{output_string}
-            
-@{config['Target']} ✅
-"""
-            with open('report.txt', 'w') as file:
-                file.write(Text)
-            await bot.send_document(chat_id=msg.chat.id, document='report.txt')
-            os.remove('report.txt')
+                if result[1]:
+                    # Assuming output is a bytes object
+                    output_bytes = result[0]
+                    # Decode bytes to string and replace "\r\n" with newlines
+                    output_string = output_bytes.decode(
+                        'utf-8').replace('\r\n', '\n')
+
+                    with open('report.txt', 'a+') as file:
+                        file.write(output_string)
+
+                    i += 1
+                    continue
+
+                else:
+                    await bot.send_message(chat_id=msg.chat.id, text=f"{result}", reply_to_message_id=msg.id)
+        except Exception as e:
+            print('Error on line {}'.format(
+                sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+            return await msg.reply_text(text=f"**{e}**\n\n ERROR !")
 
     else:
-        await bot.send_message(chat_id=msg.chat.id, text=f"{result}", reply_to_message_id=msg.id)
+        await msg.reply_text(text='**Please Enter Valid Integer Number !**\n\n Try Again :- /report')
+        return
+
+    await ms.delete()
+    await msg.reply_text(text=f"Bot Successfully Reported To @{config['Target']} ✅\n\n{no_of_reports.text} Times")
+    file = open('report.txt', 'a')
+    file.write(
+        f"\n\n@{config['Target']} Channel or Group is Reported {no_of_reports.text} Times ✅")
+    file.close()
+    await bot.send_document(chat_id=msg.chat.id, document='report.txt', reply_to_message_id=msg.id)
+    os.remove('report.txt')
 
 
 @Client.on_message(filters.private & filters.user(Config.OWNER) & filters.command('report'))
