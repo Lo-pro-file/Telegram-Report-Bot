@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -9,6 +10,8 @@ from info import Config, Txt
 
 
 config_path = Path("config.json")
+
+script_path = Path('login.py').resolve()
 
 
 @Client.on_message(filters.private & filters.chat(Config.OWNER) & filters.command('make_config'))
@@ -62,8 +65,9 @@ async def make_config(bot: Client, msg: Message):
 
                 # Run a shell command and capture its output
                 try:
+                    print(script_path)
                     process = subprocess.Popen(
-                        ["python", "login.py", f"{config['Target']}", f"{session.text}"],
+                        ["python", f"{script_path}", f"{config['Target']}", f"{session.text}"],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                     )
