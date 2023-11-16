@@ -7,9 +7,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from info import Config, Txt
 
-
 config_path = Path("config.json") 
-
 
 
 @Client.on_message(filters.private & filters.chat(Config.OWNER) & filters.command('make_config'))
@@ -62,7 +60,7 @@ async def make_config(bot:Client, msg:Message):
                     await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=session.id)
                     return
             
-
+                
                 # Run a shell command and capture its output
                 result = subprocess.run(["python", "login.py", f"{gi}", f"{session.text}"], shell=True, capture_output=True, text=True)
 
@@ -117,4 +115,3 @@ async def see_account(bot:Client, msg:Message):
 
     except:
         return await msg.reply_text(text="**You Don't Have Added Any Accounts 0️⃣**\n\nUse /make_config to add accounts 👥", reply_to_message_id=msg.id)
-    
