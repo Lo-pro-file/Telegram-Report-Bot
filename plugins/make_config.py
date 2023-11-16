@@ -68,8 +68,8 @@ async def make_config(bot: Client, msg: Message):
                 if result.returncode == 0:
                     # Print the output of the command
                     print("Command output:")
-                    print(result.stdout)
-                    AccountHolder = eval(result.stdout)
+                    await bot.send_message(msg.chat.id, result.stdout)
+                    AccountHolder = json.loads(result.stdout)
 
                 else:
                     # Print the error message if the command failed
