@@ -34,7 +34,7 @@ async def handle_Query(bot: Client, query: CallbackQuery):
     if data == "help":
 
         HelpBtn = [
-            [InlineKeyboardButton(text='Tᴀʀɢᴇᴛ 🎯', callback_data='target'), InlineKeyboardButton
+            [InlineKeyboardButton(text='Tᴀʀɢᴇᴛ 🎯', callback_data='targetchnl'), InlineKeyboardButton
                 (text='Dᴇʟᴇᴛᴇ Cᴏɴғɪɢ ❌', callback_data='delconfig')],
             [InlineKeyboardButton(text='Tɢ Aᴄᴄᴏᴜɴᴛs 👥', callback_data='account_config'),
              InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='home')]
@@ -84,7 +84,8 @@ async def handle_Query(bot: Client, query: CallbackQuery):
 
         await query.message.edit(text=Txt.START_MSG.format(query.from_user.mention), reply_markup=InlineKeyboardMarkup(Btn))
 
-    elif data == "target":
+    elif data == "targetchnl":
+
         if config_path.exists():
             with open(config_path, 'r', encoding='utf-8') as file:
                 config = json.load(file)
@@ -97,12 +98,12 @@ async def handle_Query(bot: Client, query: CallbackQuery):
         btn = [
             [InlineKeyboardButton(text='Change Target',
                                   callback_data='chgtarget')],
-            [InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='home')]
+            [InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='help')]
         ]
 
         text = f"Channel Name :- <code> {Info.title} </code>\nChannel Username :- <code> @{Info.username} </code>\nChannel Chat Id :- <code> {Info.id} </code>"
 
-        await query.message.edit(text=text, reply_to_message_id=query.message.id, reply_markup=InlineKeyboardMarkup(btn))
+        await query.message.edit(text=text, reply_markup=InlineKeyboardMarkup(btn))
 
     elif data == "chgtarget":
 
@@ -184,7 +185,7 @@ async def handle_Query(bot: Client, query: CallbackQuery):
                 text=f"{OwnerName}", callback_data=f"{OwnerUid}")])
 
         UserInfo.append([InlineKeyboardButton(
-            text='⟸ Bᴀᴄᴋ', callback_data='home')])
+            text='⟸ Bᴀᴄᴋ', callback_data='help')])
 
         await query.message.edit(text="**The Telegram Account You have Added 👇**", reply_markup=InlineKeyboardMarkup(UserInfo))
 
