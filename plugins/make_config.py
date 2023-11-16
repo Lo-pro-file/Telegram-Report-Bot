@@ -69,7 +69,7 @@ async def make_config(bot: Client, msg: Message):
                     # Print the output of the command
                     print("Command output:")
                     print(result.stdout)
-                    AccountHolder = json.loads(result.stdout)
+                    AccountHolder = eval(result.stdout)
 
                 else:
                     # Print the error message if the command failed
