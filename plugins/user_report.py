@@ -17,22 +17,31 @@ async def Report_Function(No, msg):
     message = listofchoise[int(No) - 1]
 
     # Run a shell command and capture its output
-    result = subprocess.run(
-        ["python", "report.py", f"{message}"], shell=True, capture_output=True, text=True)
-    print("Reuslt", result)
+    process = subprocess.Popen(
+        ["python", f"report.py",
+            f"{message}"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+
+    # Use communicate() to interact with the process
+    stdout, stderr = process.communicate()
+
+    # Get the return code
+    return_code = process.wait()
 
     # Check the return code to see if the command was successful
-    if result.returncode == 0:
+    if return_code == 0:
         # Print the output of the command
         print("Command output:")
-        print(result.stdout)
-        return [result.stdout, True]
+        print(stdout)
+        return [stdout, True]
 
     else:
         # Print the error message if the command failed
         print("Command failed with error:")
-        print(result.stderr)
-        return f"<b>Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !</b>\n\n <code> {result.stderr} </code> \n ERROR"
+        print(stderr)
+        return f"<b>Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !</b>\n\n <code> {stderr} </code> \n ERROR"
 
 
 async def CHOICE_OPTION(bot, msg, number):
