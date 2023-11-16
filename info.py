@@ -101,6 +101,7 @@ Tʜɪs ʙᴏᴛ ɪs sᴏʟᴇʟʏ ᴄʀᴇᴀᴛᴇ ᴏʀ ᴅᴇᴠᴇʟᴏᴘ�
 ⏣ /del_config - Delete the Config
 ⏣ /target - To see the target channel
 ⏣ /see_accounts - See all the accounts you added
+⏣ /add_account - Add new accounts
 ⏣ /report - Report the target
 ⏣ /server_stats - Check the server status
 ⏣ /restart - Restart the bot
