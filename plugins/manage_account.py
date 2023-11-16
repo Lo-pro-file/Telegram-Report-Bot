@@ -3,14 +3,15 @@ from pathlib import Path
 import subprocess
 import sys
 from pyrogram import Client, filters
-from pyrogram.types import Message, InlineKeyboardButton,InlineKeyboardMarkup
+from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 
 from info import Config, Txt
 
-config_path = Path("config.json") 
+config_path = Path("config.json")
+
 
 @Client.on_message(filters.private & filters.user(Config.OWNER) & filters.command('add_account'))
-async def add_account(bot:Client, cmd:Message):
+async def add_account(bot: Client, cmd: Message):
     try:
         if config_path.exists():
             with open(config_path, 'r', encoding='utf-8') as file:
@@ -18,22 +19,25 @@ async def add_account(bot:Client, cmd:Message):
 
         else:
             return await cmd.reply_text(text="You didn't make a config yet !\n\n Firstly make config by using /make_config", reply_to_message_id=cmd.id)
-        
 
         try:
             session = await bot.ask(text=Txt.SEND_SESSION_MSG, chat_id=cmd.chat.id, filters=filters.text, timeout=60)
         except:
             await bot.send_message(cmd.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=session.id)
             return
-        
 
         ms = await cmd.reply_text('**Please Wait...**', reply_to_message_id=cmd.id)
+
+        for acocunt in config['accounts']:
+            if acocunt['Session_String'] == session.text:
+                return await ms.edit(text=f"**{acocunt['OwnerName']} account already exist in config you can't add same account multiple times 🤡**\n\n Error !")
 
         with open(config_path, 'r', encoding='utf-8') as file:
             config = json.load(file)
 
         # Run a shell command and capture its output
-        result = subprocess.run(["python", "login.py", f"{config['Target']}", f"{session.text}"], shell=True, capture_output=True, text=True)
+        result = subprocess.run(
+            ["python", "login.py", f"{config['Target']}", f"{session.text}"], shell=True, capture_output=True, text=True)
 
         # Check the return code to see if the command was successful
         if result.returncode == 0:
@@ -41,20 +45,19 @@ async def add_account(bot:Client, cmd:Message):
             print("Command output:")
             print(result.stdout)
             AccountHolder = json.loads(result.stdout)
-            
+
         else:
             # Print the error message if the command failed
             print("Command failed with error:")
             print(result.stderr)
             return await ms.edit('**Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !**')
-            
+
         try:
             NewConfig = {
                 "Target": "kdramaland_Official",
                 "accounts": list(config['accounts'])
             }
 
-            
             new_account = {
                 "Session_String": session.text,
                 "OwnerUid": AccountHolder['id'],
@@ -66,18 +69,18 @@ async def add_account(bot:Client, cmd:Message):
             with open(config_path, 'w', encoding='utf-8') as file:
                 json.dump(NewConfig, file, indent=4)
 
-
         except Exception as e:
             print(e)
-        
 
         await ms.edit(text="**Account Added Successfully**\n\nClick the button below to view all the accounts you have added 👇.", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text='Accounts You Added', callback_data='account_config')]]))
-    
+
     except Exception as e:
-        print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+        print('Error on line {}'.format(
+            sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+
 
 @Client.on_message(filters.private & filters.user(Config.OWNER) & filters.command('target'))
-async def target(bot:Client, cmd:Message):
+async def target(bot: Client, cmd: Message):
 
     try:
         if config_path.exists():
@@ -86,22 +89,24 @@ async def target(bot:Client, cmd:Message):
 
         else:
             return await cmd.reply_text(text="You didn't make a config yet !\n\n Firstly make config by using /make_config", reply_to_message_id=cmd.id)
-        
+
         Info = await bot.get_chat(config['Target'])
 
         btn = [
-            [InlineKeyboardButton(text='Change Target', callback_data='chgtarget')]
+            [InlineKeyboardButton(text='Change Target',
+                                  callback_data='chgtarget')]
         ]
-        
+
         text = f"Channel Name :- <code> {Info.title} </code>\nChannel Username :- <code> @{Info.username} </code>\nChannel Chat Id :- <code> {Info.id} </code>"
 
         await cmd.reply_text(text=text, reply_to_message_id=cmd.id, reply_markup=InlineKeyboardMarkup(btn))
     except Exception as e:
-        print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
+        print('Error on line {}'.format(
+            sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 
 
 @Client.on_message(filters.private & filters.user(Config.OWNER) & filters.command('del_config'))
-async def delete_config(bot:Client, cmd:Message):
+async def delete_config(bot: Client, cmd: Message):
 
     btn = [
         [InlineKeyboardButton(text='Yes', callback_data='delconfig-yes')],
