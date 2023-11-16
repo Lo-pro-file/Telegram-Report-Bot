@@ -58,9 +58,14 @@ async def CHOICE_OPTION(bot, msg, number):
 
     if result[1]:
         try:
-            await bot.send_message(chat_id=msg.chat.id, text=f"{result[0]}\n\n Reported To @{config['Target']} ✅", reply_to_message_id=msg.id)
+            # Assuming output is a bytes object
+            output_bytes = result[0]
+            # Decode bytes to string and replace "\r\n" with newlines
+            output_string = output_bytes.decode('utf-8').replace('\r\n', '\n')
+
+            await bot.send_message(chat_id=msg.chat.id, text=f"{output_string}\n Reported To @{config['Target']} ✅", reply_to_message_id=msg.id)
         except:
-            Text = f"""{result[0]}
+            Text = f"""{output_string}
             
 @{config['Target']} ✅
 """
