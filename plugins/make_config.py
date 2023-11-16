@@ -61,8 +61,11 @@ async def make_config(bot: Client, msg: Message):
                     return
 
                 # Run a shell command and capture its output
-                result = subprocess.run(
-                    ["python", "login.py", f"{gi}", f"{session.text}"], shell=True, capture_output=True, text=True)
+                try:
+                    result = subprocess.run(
+                        ["python", "login.py", f"{gi}", f"{session.text}"], shell=True, capture_output=True, text=True)
+                except Exception as e:
+                    return bot.send_message(chat_id=msg.chat.id, text=e)
 
                 # Check the return code to see if the command was successful
                 if result.returncode == 0:
