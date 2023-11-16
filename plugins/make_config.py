@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -59,25 +60,38 @@ async def make_config(bot: Client, msg: Message):
                 except:
                     await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=session.id)
                     return
-
+                
                 # Run a shell command and capture its output
                 try:
-                    result = subprocess.run(
-                        ["python", "login.py", f"{gi}", f"{session.text}"], shell=True, capture_output=True, text=True)
-                except Exception as e:
-                    return bot.send_message(chat_id=msg.chat.id, text=e)
+                    
+                    process = subprocess.Popen(
+                        ["python", f"login.py", f"{config['Target']}", f"{session.text}"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                    )
+                except Exception as err:
+                    await bot.send_message(msg.chat.id, text=f"<b>ERROR :</b>\n<pre>{err}</pre>")
+
+                
+
+                # Use communicate() to interact with the process
+                stdout, stderr = process.communicate()
+
+                
+                # Get the return code
+                return_code = process.wait()
 
                 # Check the return code to see if the command was successful
-                if result.returncode == 0:
+                if return_code == 0:
                     # Print the output of the command
                     print("Command output:")
-                    await bot.send_message(msg.chat.id, result.stdout)
-                    AccountHolder = json.loads(result.stdout)
+                    print(stdout)
+                    AccountHolder = json.loads(stdout)
 
                 else:
                     # Print the error message if the command failed
                     print("Command failed with error:")
-                    print(result.stderr)
+                    print(stderr)
                     return await msg.reply_text('**Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !**')
 
                 try:
