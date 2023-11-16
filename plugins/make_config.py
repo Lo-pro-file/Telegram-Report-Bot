@@ -49,6 +49,12 @@ async def make_config(bot: Client, msg: Message):
             group_target_id = target.text
             gi = re.sub("(@)|(https://)|(http://)|(t.me/)",
                         "", group_target_id)
+
+            try:
+                await bot.get_chat(gi)
+            except Exception as e:
+                return await msg.reply_text(text=f"{e} \n\nError !", reply_to_message_id=target.id)
+
             config = {
                 "Target": gi,
                 "accounts": []
@@ -60,24 +66,22 @@ async def make_config(bot: Client, msg: Message):
                 except:
                     await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=session.id)
                     return
-                
+
                 # Run a shell command and capture its output
                 try:
-                    
+
                     process = subprocess.Popen(
-                        ["python", f"login.py", f"{config['Target']}", f"{session.text}"],
+                        ["python", f"login.py",
+                            f"{config['Target']}", f"{session.text}"],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                     )
                 except Exception as err:
                     await bot.send_message(msg.chat.id, text=f"<b>ERROR :</b>\n<pre>{err}</pre>")
 
-                
-
                 # Use communicate() to interact with the process
                 stdout, stderr = process.communicate()
 
-                
                 # Get the return code
                 return_code = process.wait()
 
