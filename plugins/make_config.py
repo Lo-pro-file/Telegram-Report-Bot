@@ -7,18 +7,18 @@ from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from info import Config, Txt
 
-config_path = Path("config.json") 
+
+config_path = Path("config.json")
 
 
 @Client.on_message(filters.private & filters.chat(Config.OWNER) & filters.command('make_config'))
-async def make_config(bot:Client, msg:Message):
+async def make_config(bot: Client, msg: Message):
     try:
         if config_path.exists():
             return await msg.reply_text(text="**You have already made a config first delete it then you'll able to make it config**\n\n Use /del_config", reply_to_message_id=msg.id)
         else:
 
             while True:
-                
 
                 try:
                     n = await bot.ask(text=Txt.SEND_NUMBERS_MSG, chat_id=msg.chat.id, filters=filters.text, timeout=60)
@@ -27,9 +27,9 @@ async def make_config(bot:Client, msg:Message):
                     return
 
                 try:
-                    target = await bot.ask(text=Txt.SEND_TARGET_CHANNEL, chat_id=msg.chat.id, filters = filters.text, timeout=60)
+                    target = await bot.ask(text=Txt.SEND_TARGET_CHANNEL, chat_id=msg.chat.id, filters=filters.text, timeout=60)
                 except:
-                    
+
                     await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=msg.id)
                     return
 
@@ -44,14 +44,14 @@ async def make_config(bot:Client, msg:Message):
                 else:
                     await msg.reply_text(text="⚠️ **Pleae Send Integer Number not String !**", reply_to_message_id=n.id)
                     continue
-            
+
             group_target_id = target.text
-            gi = re.sub("(@)|(https://)|(http://)|(t.me/)", "", group_target_id)
+            gi = re.sub("(@)|(https://)|(http://)|(t.me/)",
+                        "", group_target_id)
             config = {
                 "Target": gi,
                 "accounts": []
             }
-                
 
             for _ in range(int(n.text)):
                 try:
@@ -59,10 +59,10 @@ async def make_config(bot:Client, msg:Message):
                 except:
                     await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=session.id)
                     return
-            
-                
+
                 # Run a shell command and capture its output
-                result = subprocess.run(["python", "login.py", f"{gi}", f"{session.text}"], shell=True, capture_output=True, text=True)
+                result = subprocess.run(
+                    ["python", "login.py", f"{gi}", f"{session.text}"], shell=True, capture_output=True, text=True)
 
                 # Check the return code to see if the command was successful
                 if result.returncode == 0:
@@ -70,15 +70,15 @@ async def make_config(bot:Client, msg:Message):
                     print("Command output:")
                     print(result.stdout)
                     AccountHolder = json.loads(result.stdout)
-                    
+
                 else:
                     # Print the error message if the command failed
                     print("Command failed with error:")
                     print(result.stderr)
                     return await msg.reply_text('**Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !**')
-                    
+
                 try:
-                    
+
                     new_account = {
                         "Session_String": session.text,
                         "OwnerUid": AccountHolder['id'],
@@ -93,23 +93,25 @@ async def make_config(bot:Client, msg:Message):
                     print(e)
 
             acocunt_btn = [
-                [InlineKeyboardButton(text='Accounts You Added', callback_data='account_config')]
+                [InlineKeyboardButton(
+                    text='Accounts You Added', callback_data='account_config')]
             ]
             await msg.reply_text(text=Txt.MAKE_CONFIG_DONE_MSG.format(n.text), reply_to_message_id=n.id, reply_markup=InlineKeyboardMarkup(acocunt_btn))
 
     except Exception as e:
-        print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
-
+        print('Error on line {}'.format(
+            sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 
 
 @Client.on_message(filters.private & filters.chat(Config.OWNER) & filters.command('see_accounts'))
-async def see_account(bot:Client, msg:Message):
-    
+async def see_account(bot: Client, msg: Message):
+
     try:
 
         config = (json.load(open("config.json")))['accounts']
         acocunt_btn = [
-            [InlineKeyboardButton(text='Accounts You Added', callback_data='account_config')]
+            [InlineKeyboardButton(text='Accounts You Added',
+                                  callback_data='account_config')]
         ]
         await msg.reply_text(text=Txt.ADDED_ACCOUNT.format(len(config)), reply_to_message_id=msg.id, reply_markup=InlineKeyboardMarkup(acocunt_btn))
 
