@@ -84,6 +84,14 @@ Your have added {} accounts 👥
 Whats your  reason: select 1-9 👇 
 """
 
+    SEND_NO_OF_REPORT_MSG = """
+❪ SELECT NUMBER OF REPORTS 👤 ❫
+
+**Send Number of reports which you want to report to this @{}**
+
+The bot will keep reporting to target channel or group until it's reach the number of report. 🎯
+"""
+
     START_MSG = """
 Hɪ {},
 
