@@ -35,7 +35,7 @@ async def handle_Query(bot: Client, query: CallbackQuery):
 
         HelpBtn = [
             [InlineKeyboardButton(text='Tᴀʀɢᴇᴛ 🎯', callback_data='targetchnl'), InlineKeyboardButton
-                (text='Dᴇʟᴇᴛᴇ Cᴏɴғɪɢ ❌', callback_data='delconfig')],
+                (text='Dᴇʟᴇᴛᴇ Cᴏɴғɪɢ ❌', callback_data='delete_conf')],
             [InlineKeyboardButton(text='Tɢ Aᴄᴄᴏᴜɴᴛs 👥', callback_data='account_config'),
              InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='home')]
         ]
@@ -83,6 +83,15 @@ async def handle_Query(bot: Client, query: CallbackQuery):
         ]
 
         await query.message.edit(text=Txt.START_MSG.format(query.from_user.mention), reply_markup=InlineKeyboardMarkup(Btn))
+
+
+    elif data == "delete_conf":
+        btn = [
+        [InlineKeyboardButton(text='Yes', callback_data='delconfig-yes')],
+        [InlineKeyboardButton(text='No', callback_data='delconfig-no')]
+    ]
+
+    await query.message.edit(text="**⚠️ Are you Sure ?**\n\nYou want to delete the Config.", reply_markup=InlineKeyboardMarkup(btn))
 
     elif data == "targetchnl":
 
