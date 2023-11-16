@@ -5,9 +5,6 @@ from pyrogram import Client, errors
 
 def main(Target, String):
 
-    # group target link
-    group_target_id = Target
-    gi = re.sub("(@)|(https://)|(http://)|(t.me/)", "", group_target_id)
     # workdir = 'session/'
     SessionString = String
     with Client(name="Session", session_string=SessionString) as app:
@@ -15,9 +12,9 @@ def main(Target, String):
         if app.get_me():
             print(User)
             try:
-                app.join_chat(gi)
+                app.join_chat(Target)
             except errors.UserAlreadyParticipant:
-                app.get_chat(gi)
+                app.get_chat(Target)
             except:
                 pass
         else:
