@@ -17,11 +17,11 @@
 
 ## Deploy To Koyeb
 
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&repository=github.com/Snowball-0/Telegram-Report-Bot&env[BOT_TOKEN]&env[API_ID]&env[API_HASH]&env[OWNER]) 
+[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&repository=github.com/Snowball-0/Telegram-Report-Bot/tree/master&env[BOT_TOKEN]&env[API_ID]&env[API_HASH]&env[OWNER]) 
 
 ## Deploy To Render              
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Snowball-0/Telegram-Report-Bot)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Snowball-0/Telegram-Report-Bot/tree/master)
 
 ## Deploy To Railway
 
@@ -29,7 +29,7 @@
 
 ## Deploy To Heroku
 
-<a href="https://heroku.com/deploy?template=https://github.com/Snowball-0/Telegram-Report-Bot"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy"></a>
+<a href="https://heroku.com/deploy?template=https://github.com/Snowball-0/Telegram-Report-Bot/tree/master"><img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy"></a>
 
 
 
