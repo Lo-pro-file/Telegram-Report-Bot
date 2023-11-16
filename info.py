@@ -49,7 +49,7 @@ class Txt(object):
 """
 
     MAKE_CONFIG_DONE_MSG = """
-Your {} Numbers of account has been added 👥
+Your {} accounts has been added 👥
 
 And Logined to the Target Channel/Group to Report it. ✅
 
