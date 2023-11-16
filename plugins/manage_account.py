@@ -66,11 +66,11 @@ async def add_account(bot: Client, cmd: Message):
             # Print the error message if the command failed
             print("Command failed with error:")
             print(stderr)
-            return await msg.reply_text('**Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !**')
+            return await ms.edit('**Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !**')
 
         try:
             NewConfig = {
-                "Target": "kdramaland_Official",
+                "Target": config['Target'],
                 "accounts": list(config['accounts'])
             }
 
