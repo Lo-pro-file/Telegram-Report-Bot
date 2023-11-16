@@ -35,22 +35,38 @@ async def add_account(bot: Client, cmd: Message):
         with open(config_path, 'r', encoding='utf-8') as file:
             config = json.load(file)
 
-        # Run a shell command and capture its output
-        result = subprocess.run(
-            ["python", "login.py", f"{config['Target']}", f"{session.text}"], shell=True, capture_output=True, text=True)
+         # Run a shell command and capture its output
+        try:
+            
+            process = subprocess.Popen(
+                ["python", f"login.py", f"{config['Target']}", f"{session.text}"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+        except Exception as err:
+            await bot.send_message(cmd.chat.id, text=f"<b>ERROR :</b>\n<pre>{err}</pre>")
+
+        
+
+        # Use communicate() to interact with the process
+        stdout, stderr = process.communicate()
+
+        
+        # Get the return code
+        return_code = process.wait()
 
         # Check the return code to see if the command was successful
-        if result.returncode == 0:
+        if return_code == 0:
             # Print the output of the command
             print("Command output:")
-            print(result.stdout)
-            AccountHolder = json.loads(result.stdout)
+            print(stdout)
+            AccountHolder = json.loads(stdout)
 
         else:
             # Print the error message if the command failed
             print("Command failed with error:")
-            print(result.stderr)
-            return await ms.edit('**Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !**')
+            print(stderr)
+            return await msg.reply_text('**Something Went Wrong Kindly Check your Inputs Whether You Have Filled Correctly or Not !**')
 
         try:
             NewConfig = {
