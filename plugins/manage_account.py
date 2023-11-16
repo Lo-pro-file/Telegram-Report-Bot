@@ -11,8 +11,6 @@ from info import Config, Txt
 
 config_path = Path("config.json")
 
-script_path = Path('login.py').resolve()
-
 
 @Client.on_message(filters.private & filters.chat(Config.OWNER) & filters.command('make_config'))
 async def make_config(bot: Client, msg: Message):
@@ -62,20 +60,18 @@ async def make_config(bot: Client, msg: Message):
                 except:
                     await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=session.id)
                     return
-
+                
                 # Run a shell command and capture its output
                 try:
-                    print(script_path)
+                    
                     process = subprocess.Popen(
-                        ["python", f"{script_path}", f"{config['Target']}", f"{session.text}"],
+                        ["python", f"login.py", f"{config['Target']}", f"{session.text}"],
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE,
                     )
                 except Exception as err:
                     await bot.send_message(msg.chat.id, text=f"<b>ERROR :</b>\n<pre>{err}</pre>")
-                output += f"<b>{n.text}</b>\n"
-                output += process.stdout.read()[:-1].decode("utf-8")
-                output += "\n"
+
                 
 
                 # Use communicate() to interact with the process
