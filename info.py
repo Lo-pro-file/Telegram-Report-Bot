@@ -111,7 +111,6 @@ Tʜɪs ʙᴏᴛ ɪs sᴏʟᴇʟʏ ᴄʀᴇᴀᴛᴇ ᴏʀ ᴅᴇᴠᴇʟᴏᴘ�
 ⏣ /see_accounts - See all the accounts you added
 ⏣ /add_account - Add new accounts
 ⏣ /report - Report the target
-⏣ /server_stats - Check the server status
 ⏣ /restart - Restart the bot
 
 💢 Features:
