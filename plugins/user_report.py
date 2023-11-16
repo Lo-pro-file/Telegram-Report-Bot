@@ -33,7 +33,10 @@ async def Report_Function(No, msg):
 
 
 async def CHOICE_OPTION(bot, msg, number):
-
+    
+    if not config_path.exists():
+            return await msg.reply_text(text="**You don't have any config first make the config then you'll able to report**\n\n Use /make_config", reply_to_message_id=msg.id)
+        
     with open(config_path, 'r', encoding='utf-8') as file:
         config = json.load(file)
 
