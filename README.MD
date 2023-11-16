@@ -53,5 +53,6 @@ target - To see the target channel
 see_accounts - See all the accounts you added
 report - Report the target
 server_stats - Check the server status
+add_account - Add new account
 restart - Restart the bot
 ```
