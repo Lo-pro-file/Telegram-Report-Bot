@@ -91,7 +91,7 @@ async def handle_Query(bot: Client, query: CallbackQuery):
         [InlineKeyboardButton(text='No', callback_data='delconfig-no')]
     ]
 
-    await query.message.edit(text="**⚠️ Are you Sure ?**\n\nYou want to delete the Config.", reply_markup=InlineKeyboardMarkup(btn))
+        await query.message.edit(text="**⚠️ Are you Sure ?**\n\nYou want to delete the Config.", reply_markup=InlineKeyboardMarkup(btn))
 
     elif data == "targetchnl":
 
