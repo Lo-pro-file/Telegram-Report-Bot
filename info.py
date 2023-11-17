@@ -65,7 +65,6 @@ Your have added {} accounts 👥
     ACCOUNT_INFO = """
 <b> Name :- </b> <code> {0} </code>
 <b> User Id :- </b> <code> {1} </code>
-<b> User Name :- </b> @{2}
 """
 
     REPORT_CHOICE = """
