@@ -24,7 +24,7 @@ async def make_config(bot: Client, msg: Message):
                 try:
                     n = await bot.ask(text=Txt.SEND_NUMBERS_MSG, chat_id=msg.chat.id, filters=filters.text, timeout=60)
                 except:
-                    await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=msg.id)
+                    await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=n.id)
                     return
 
                 try:
@@ -64,7 +64,7 @@ async def make_config(bot: Client, msg: Message):
                 try:
                     session = await bot.ask(text=Txt.SEND_SESSION_MSG, chat_id=msg.chat.id, filters=filters.text, timeout=60)
                 except:
-                    await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=msg.id)
+                    await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=session.id)
                     return
 
                 # Run a shell command and capture its output
@@ -89,8 +89,13 @@ async def make_config(bot: Client, msg: Message):
                 if return_code == 0:
                     # Print the output of the command
                     print("Command output:")
-                    print(stdout)
-                    AccountHolder = json.loads(stdout)
+                    # Assuming output is a bytes object
+                    output_bytes = stdout
+                    # Decode bytes to string and replace "\r\n" with newlines
+                    output_string = output_bytes.decode(
+                        'utf-8').replace('\r\n', '\n')
+                    print(output_string)
+                    AccountHolder = json.loads(output_string)
 
                 else:
                     # Print the error message if the command failed
