@@ -84,12 +84,11 @@ async def handle_Query(bot: Client, query: CallbackQuery):
 
         await query.message.edit(text=Txt.START_MSG.format(query.from_user.mention), reply_markup=InlineKeyboardMarkup(Btn))
 
-
     elif data == "delete_conf":
         btn = [
-        [InlineKeyboardButton(text='Yes', callback_data='delconfig-yes')],
-        [InlineKeyboardButton(text='No', callback_data='delconfig-no')]
-    ]
+            [InlineKeyboardButton(text='Yes', callback_data='delconfig-yes')],
+            [InlineKeyboardButton(text='No', callback_data='delconfig-no')]
+        ]
 
         await query.message.edit(text="**⚠️ Are you Sure ?**\n\nYou want to delete the Config.", reply_markup=InlineKeyboardMarkup(btn))
 
@@ -156,8 +155,12 @@ async def handle_Query(bot: Client, query: CallbackQuery):
                 if return_code == 0:
                     # Print the output of the command
                     print("Command output:")
-                    print(stdout)
-                    AccountHolder = json.loads(stdout)
+                    # Assuming output is a bytes object
+                    output_bytes = stdout
+                    # Decode bytes to string and replace "\r\n" with newlines
+                    output_string = output_bytes.decode(
+                        'utf-8').replace('\r\n', '\n')
+                    print(output_string)
 
                 else:
                     # Print the error message if the command failed
