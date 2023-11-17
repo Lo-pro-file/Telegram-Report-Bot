@@ -24,7 +24,7 @@ async def make_config(bot: Client, msg: Message):
                 try:
                     n = await bot.ask(text=Txt.SEND_NUMBERS_MSG, chat_id=msg.chat.id, filters=filters.text, timeout=60)
                 except:
-                    await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=n.id)
+                    await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=msg.id)
                     return
 
                 try:
@@ -64,7 +64,7 @@ async def make_config(bot: Client, msg: Message):
                 try:
                     session = await bot.ask(text=Txt.SEND_SESSION_MSG, chat_id=msg.chat.id, filters=filters.text, timeout=60)
                 except:
-                    await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=session.id)
+                    await bot.send_message(msg.from_user.id, "Error!!\n\nRequest timed out.\nRestart by using /make_config", reply_to_message_id=msg.id)
                     return
 
                 # Run a shell command and capture its output
