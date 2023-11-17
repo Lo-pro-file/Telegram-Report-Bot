@@ -85,6 +85,10 @@ async def handle_Query(bot: Client, query: CallbackQuery):
         await query.message.edit(text=Txt.START_MSG.format(query.from_user.mention), reply_markup=InlineKeyboardMarkup(Btn))
 
     elif data == "delete_conf":
+
+        if query.from_user.id != Config.OWNER:
+            return await query.message.edit("**You're Not Admin To Perform this task ❌**")
+            
         btn = [
             [InlineKeyboardButton(text='Yes', callback_data='delconfig-yes')],
             [InlineKeyboardButton(text='No', callback_data='delconfig-no')]
