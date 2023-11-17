@@ -226,7 +226,6 @@ async def handle_Query(bot: Client, query: CallbackQuery):
             if int(data) == account["OwnerUid"]:
                 accountData.update({'Name': account['OwnerName']})
                 accountData.update({'UserId': account['OwnerUid']})
-                accountData.update({'Username': account['OwnerUname']})
 
-        await query.message.edit(text=Txt.ACCOUNT_INFO.format(accountData.get('Name'), accountData.get('UserId'), accountData.get('Username')), reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='help')]]))
+        await query.message.edit(text=Txt.ACCOUNT_INFO.format(accountData.get('Name'), accountData.get('UserId')), reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text='⟸ Bᴀᴄᴋ', callback_data='help')]]))
         accountData = {}
