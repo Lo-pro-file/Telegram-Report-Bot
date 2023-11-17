@@ -108,7 +108,6 @@ async def make_config(bot: Client, msg: Message):
                     new_account = {
                         "Session_String": session.text,
                         "OwnerUid": AccountHolder['id'],
-                        "OwnerUname": AccountHolder['username'],
                         "OwnerName": AccountHolder['first_name']
                     }
                     config["accounts"].append(new_account)
