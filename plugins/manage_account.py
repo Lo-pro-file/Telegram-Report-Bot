@@ -37,21 +37,19 @@ async def add_account(bot: Client, cmd: Message):
 
          # Run a shell command and capture its output
         try:
-            
+
             process = subprocess.Popen(
-                ["python", f"login.py", f"{config['Target']}", f"{session.text}"],
+                ["python", f"login.py",
+                    f"{config['Target']}", f"{session.text}"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
         except Exception as err:
             await bot.send_message(cmd.chat.id, text=f"<b>ERROR :</b>\n<pre>{err}</pre>")
 
-        
-
         # Use communicate() to interact with the process
         stdout, stderr = process.communicate()
 
-        
         # Get the return code
         return_code = process.wait()
 
@@ -59,8 +57,12 @@ async def add_account(bot: Client, cmd: Message):
         if return_code == 0:
             # Print the output of the command
             print("Command output:")
-            print(stdout)
-            AccountHolder = json.loads(stdout)
+            # Assuming output is a bytes object
+            output_bytes = stdout
+            # Decode bytes to string and replace "\r\n" with newlines
+            output_string = output_bytes.decode('utf-8').replace('\r\n', '\n')
+            print(output_string)
+            AccountHolder = json.loads(output_string)
 
         else:
             # Print the error message if the command failed
