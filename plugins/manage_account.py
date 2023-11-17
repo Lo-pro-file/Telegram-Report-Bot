@@ -79,7 +79,6 @@ async def add_account(bot: Client, cmd: Message):
             new_account = {
                 "Session_String": session.text,
                 "OwnerUid": AccountHolder['id'],
-                "OwnerUname": AccountHolder['username'],
                 "OwnerName": AccountHolder['first_name']
             }
             NewConfig["accounts"].append(new_account)
